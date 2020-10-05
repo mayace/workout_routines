@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_beep/flutter_beep.dart';
@@ -49,9 +50,23 @@ class _MyHomePageState extends State<MyHomePage> {
   var time = 10;
   var playing = false;
 
+  final Map<String, Color> colorList = {
+    "on": Colors.blue,
+    "off": Colors.transparent,
+  };
   Timer timeout;
 
   String get estadoActual => this.playing ? "playing" : "stop";
+
+  void _playCheckPointSound(String code) async {
+    await FlutterBeep.beep();
+    sleep(Duration(seconds: 1));
+    await FlutterBeep.beep();
+    sleep(Duration(milliseconds: 100));
+    await FlutterBeep.beep();
+    sleep(Duration(milliseconds: 100));
+    await FlutterBeep.beep();
+  }
 
   void _minusOne() {
     final newVal = this.time - 1;
@@ -66,6 +81,7 @@ class _MyHomePageState extends State<MyHomePage> {
         this.playing = false;
         this.time = 0;
       });
+      _playCheckPointSound(this.estadoActual);
     }
   }
 
@@ -73,6 +89,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: Container(
+      color: this.playing ? this.colorList["on"] : this.colorList["off"],
       child: Column(
         children: [
           Expanded(
